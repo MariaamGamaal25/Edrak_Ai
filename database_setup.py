@@ -33,13 +33,11 @@ def create_database(db_path="course_generation.db"):
     cursor.execute("""
         CREATE TABLE courses (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
+            title TEXT,
             description TEXT,
             textbook_filename TEXT,
             total_chapters INTEGER,
-            total_lessons INTEGER,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            total_lessons INTEGER
         )
     """)
     
@@ -48,10 +46,9 @@ def create_database(db_path="course_generation.db"):
         CREATE TABLE chapters (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             course_id INTEGER NOT NULL,
-            name TEXT NOT NULL,
-            details TEXT,
-            chapter_order INTEGER NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            name TEXT ,
+            details TEXT,      
+            chapter_order INTEGER ,
             FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE
         )
     """)
@@ -61,13 +58,12 @@ def create_database(db_path="course_generation.db"):
         CREATE TABLE lessons (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             chapter_id INTEGER NOT NULL,
-            name TEXT NOT NULL,
+            name TEXT ,
             details TEXT,
-            script_text TEXT NOT NULL,
+            script_text TEXT ,
             audio_path TEXT,
             video_storage_url TEXT,
-            lesson_order INTEGER NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            lesson_order INTEGER ,
             FOREIGN KEY (chapter_id) REFERENCES chapters (id) ON DELETE CASCADE
         )
     """)
@@ -77,12 +73,10 @@ def create_database(db_path="course_generation.db"):
         CREATE TABLE questions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             lesson_id INTEGER NOT NULL,
-            question_text TEXT NOT NULL,
+            question_text TEXT ,
             question_instructions TEXT,
             question_type INTEGER NOT NULL,  -- 1 for MCQ, 2 for True/False
             question_level_id INTEGER NOT NULL,
-            question_order INTEGER NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (lesson_id) REFERENCES lessons (id) ON DELETE CASCADE
         )
     """)
@@ -94,8 +88,6 @@ def create_database(db_path="course_generation.db"):
             question_id INTEGER NOT NULL,
             answer_text TEXT NOT NULL,
             is_correct BOOLEAN NOT NULL DEFAULT FALSE,
-            answer_order INTEGER NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (question_id) REFERENCES questions (id) ON DELETE CASCADE
         )
     """)
